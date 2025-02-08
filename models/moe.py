@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import pytorch_lightning as pl
+import lightning as pl
 from .components import DictionaryExpert, GatingNetwork
 from ..configs import ModelConfig
 

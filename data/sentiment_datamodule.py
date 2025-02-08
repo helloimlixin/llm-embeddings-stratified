@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+import lightning as pl
 from torch.utils.data import DataLoader, TensorDataset
 import torch
 import numpy as np
@@ -6,7 +6,7 @@ from datasets import load_dataset, concatenate_datasets
 from datasets.features import Value
 from sklearn.decomposition import PCA
 import openai
-from ..config import DataConfig
+from ..configs import DataConfig
 
 
 class MultiDomainSentimentDataModule(pl.LightningDataModule):
