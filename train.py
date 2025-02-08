@@ -22,10 +22,6 @@ import logging
 from pathlib import Path
 
 
-# set OpenAI API key
-openai.api_key = "OPENAI_API_KEY"
-
-
 #############################################################################
 # 1. Configuration Classes
 #############################################################################
