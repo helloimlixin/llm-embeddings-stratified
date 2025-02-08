@@ -1,0 +1,29 @@
+defaults:
+  - _self_
+
+experiment_name: moe_default
+
+wandb:
+  project: "moe-sentiment"
+  entity: null  # Set to your wandb username/team
+  log_model: true
+
+data:
+  samples_per_domain: 50
+  batch_size: 16
+  pca_dim: 64
+  embedding_model: "text-embedding-ada-002"
+
+model:
+  input_dim: 64
+  hidden_dim: 128
+  code_dim: 32
+  num_experts: 3
+  learning_rate: 1e-3
+  lambda_reg: 1e-5
+
+trainer:
+  max_epochs: 100
+  accelerator: "auto"
+  devices: 1
+  default_root_dir: "experiments"
