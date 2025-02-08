@@ -3,7 +3,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import lightning as pl
-from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.callbacks import ModelCheckpoint, RichProgressBar
+from lightning.pytorch.callbacks.progress.rich_progress import RichProgressBarTheme
 import numpy as np
 from sklearn.decomposition import PCA
 import pandas as pd
@@ -20,6 +21,10 @@ from omegaconf import DictConfig, OmegaConf
 import os
 import logging
 from pathlib import Path
+
+
+# set OpenAI API key
+openai.api_key = "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"
 
 
 #############################################################################
@@ -51,11 +56,11 @@ class ModelConfig:
 
 @dataclass
 class TrainerConfig:
-    max_epochs: int = 100
+    max_epochs: int = 1000
     accelerator: str = "auto"
     devices: int = 1
     default_root_dir: str = "experiments"
-    log_every_n_steps: int = 1
+    log_every_n_steps: int = 10
 
 
 @dataclass
@@ -280,7 +285,8 @@ class MultiDomainSentimentDataModule(pl.LightningDataModule):
         return DataLoader(self.dataset,
                           batch_size=self.config.batch_size,
                           shuffle=False,
-                          num_workers=4)
+                          num_workers=4,
+                          persistent_workers=True)
 
 
 #############################################################################
@@ -400,12 +406,23 @@ def train_moe_model(cfg: DictConfig):
         mode='min'
     )
 
+    progress_bar = RichProgressBar(  ## wip
+        theme=RichProgressBarTheme(
+            description="green_yellow",
+            progress_bar="green1",
+            progress_bar_finished="green1",
+            batch_progress="green_yellow",
+            time="grey82",
+            processing_speed="grey82",
+            metrics="grey82",
+        ))
+
     # Initialize trainer
     trainer = pl.Trainer(
         max_epochs=cfg.trainer.max_epochs,
         accelerator=cfg.trainer.accelerator,
         devices=cfg.trainer.devices,
-        callbacks=[checkpoint_callback],
+        callbacks=[checkpoint_callback, progress_bar],
         default_root_dir=cfg.trainer.default_root_dir,
         log_every_n_steps=cfg.trainer.log_every_n_steps
     )
