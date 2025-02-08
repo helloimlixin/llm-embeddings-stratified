@@ -23,7 +23,7 @@ from pathlib import Path
 
 
 # set OpenAI API key
-openai.api_key = "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"
+openai.api_key = "OPENAI_API_KEY"
 
 
 #############################################################################
